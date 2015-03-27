@@ -9,10 +9,10 @@ public class CrawlerController {
 
 	public static void main(String[] args) {
 		
-		String urlToCrawl=""; //args[0];
+		//String urlToCrawl=""; //args[0];
 		String mailYear= "2015"; //args[1];
 		CrawlerService crawlerServiceObj= new CrawlerService();
-		crawlerServiceObj.getHyperlinksOfGivenYearService(mailYear,urlToCrawl);
+		crawlerServiceObj.downloadMailService(mailYear);
 		
 	}
 }
