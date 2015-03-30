@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.organisation.pramati</groupId>
+  <groupId>com.organisation.pramati.webCrawler</groupId>
   <artifactId>webCrawler</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -13,8 +13,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
- 
-     
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -23,20 +22,21 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
   <build>
-  	<plugins>
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-jar-plugin</artifactId>
-  			<version>2.4</version>
-  	<configuration>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>2.4</version>
+      <configuration>
      <archive>
        <manifest>
-         <mainClass>com.organisation.pramati.webCrawler.controller.CrawlerController</mainClass> 
+         <mainClass>com.organisation.pramati.webCrawler.controller.CrawlerController</mainClass>
        </manifest>
      </archive>
    </configuration>
-  		</plugin>
-  	</plugins>
+          </plugin>
+      </plugins>
   </build>
 </project>
