@@ -127,7 +127,7 @@ public ArrayList<FileMetaData> getHyperLinksOfAllMonthsMails(ArrayList<String> h
 		            	 m = p.matcher(line);
 		            	 if (m!=null && m.find()) 
 		            	 {   if(m.group(1)!=null)
-		            		 fileMetaDataObj.setHyperLinkOfMail(link+m.group(1)); 
+		            		 fileMetaDataObj.setHyperLinkOfMail(link+"raw/"+m.group(1)); 
 		            	     count++;
 		            	 }
 		            	//System.out.println("links "+fileMetaDataObj.getHyperLinkOfMail() );	 
@@ -260,8 +260,33 @@ if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0);
 
 private void saveEmails(ArrayList<FileMetaData> hyperLinkForAllEmails,String mailYear) {
 	
+	createDirectory(Constants.DIR_PATH);
+	File directory=createDirectory(Constants.DIR_PATH+"/"+mailYear);
+	
 	String filePath;
-	String dirPath="Downloads/"+mailYear;
+
+	if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0){
+		
+	for(FileMetaData file : hyperLinkForAllEmails)
+		
+	{
+		filePath=getFilePath(file);
+		File messageRawFile= createFile(directory,filePath);	
+		System.out.println("sending email hyperlink" +file.getHyperLinkOfMail());
+		saveEmailToFile(messageRawFile,file.getHyperLinkOfMail());
+		
+		
+	}
+	
+	
+	}
+		
+}
+
+private File createDirectory(String dirPath) {
+	
+	
+	//String dirPath="Downloads";
 	File directory= new File(dirPath);
 	boolean success;
 	
@@ -278,24 +303,7 @@ private void saveEmails(ArrayList<FileMetaData> hyperLinkForAllEmails,String mai
             System.out.printf("Failed to create new directory: %s%n", dirPath);
         }
     }
-
-	
-	if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0){
-		
-	for(FileMetaData file : hyperLinkForAllEmails)
-		
-	{
-		filePath="./Downloads"+getFilePath(file);
-		File messageRawFile= createFile(filePath);	
-		System.out.println("sending email hyperlink" +file.getHyperLinkOfMail());
-		saveEmailToFile(messageRawFile,file.getHyperLinkOfMail());
-		
-		
-	}
-	
-	
-	}
-		
+	return directory;
 }
 
 private void saveEmailToFile(File messageRawFile, String hyperLinkOfMail) {
@@ -327,11 +335,11 @@ private void saveEmailToFile(File messageRawFile, String hyperLinkOfMail) {
 	
 }
 
-private File createFile(String filePath) {
+private File createFile(File directory,String filePath) {
 	
 	boolean success=false;
 	
-	File messageRawFile= new File(filePath);
+	File messageRawFile= new File(directory, filePath);
 	
 	if (messageRawFile.exists()) {
         System.out.println("File already exists");
@@ -365,7 +373,7 @@ private String getFilePath(FileMetaData fileObj) {
 		if(fileObj.getDateOfMail()!=null)
 		{
 			String date[]=fileObj.getDateOfMail().split(" ");
-		    filePath="\\"+date[2]+"\\"+fileObj.getAuthorName().replaceAll("/","")+fileObj.getSubjectOfMail().replaceAll("/","")+fileObj.getDateOfMail()+".txt";
+		    filePath=date[2]+fileObj.getAuthorName().replaceAll("/","")+fileObj.getSubjectOfMail().replaceAll("/","")+fileObj.getDateOfMail()+".txt";
 	 }
 	
 	}

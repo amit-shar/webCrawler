@@ -4,6 +4,8 @@ public final class Constants {
 	
 	
  public static final String URL_TO_CRAWL = "http://mail-archives.apache.org/mod_mbox/maven-users/";
+public static final String DIR_PATH="DownLoads";
+
 	
  
  
