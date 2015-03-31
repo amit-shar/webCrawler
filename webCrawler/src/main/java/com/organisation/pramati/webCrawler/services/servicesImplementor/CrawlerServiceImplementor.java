@@ -1,6 +1,7 @@
 package com.organisation.pramati.webCrawler.services.servicesImplementor;
 
-import java.util.ArrayList;
+
+import java.util.Set;
 
 import com.organisation.pramati.webCrawler.model.FileMetaData;
 import com.organisation.pramati.webCrawler.services.CrawlerService;
@@ -8,12 +9,12 @@ import com.organisation.pramati.webCrawler.services.serviceProcessor.CrawlerServ
 
 public class CrawlerServiceImplementor implements CrawlerService{
 	
-public ArrayList<String> getHyperlinksOfGivenYearService(String mailYear)
+public Set<String> getHyperlinksOfGivenYearService(String mailYear)
 	
 	{
 		CrawlerServiceProcessor crawlerServiceProcessorObj = new CrawlerServiceProcessor();
 		
-		ArrayList<String> hyperLinksOfMonths = crawlerServiceProcessorObj.getHyperlinksOfGivenYearService(mailYear);
+		Set<String> hyperLinksOfMonths = crawlerServiceProcessorObj.getHyperlinksOfGivenYearService(mailYear);
 		
 		if(hyperLinksOfMonths!=null && hyperLinksOfMonths.size()>0)
 		{
@@ -37,11 +38,11 @@ return hyperLinksOfMonths;
 
 	}
 
-public ArrayList<FileMetaData> getHyperLinksOfAllMonthsMails(ArrayList<String> hyperLinksOfMonths)
+public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfMonths)
 {
 	CrawlerServiceProcessor crawlerServiceProcessorObj = new CrawlerServiceProcessor();
 	
-	ArrayList<FileMetaData> hyperLinksOfAllMails= crawlerServiceProcessorObj.getHyperLinksOfAllMonthsMails(hyperLinksOfMonths);
+	Set<FileMetaData> hyperLinksOfAllMails= crawlerServiceProcessorObj.getHyperLinksOfAllMonthsMails(hyperLinksOfMonths);
 	
 	return hyperLinksOfAllMails;
 

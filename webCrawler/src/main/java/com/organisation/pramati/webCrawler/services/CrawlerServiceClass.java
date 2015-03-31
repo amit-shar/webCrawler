@@ -1,7 +1,7 @@
 package com.organisation.pramati.webCrawler.services;
 
 
-import java.util.ArrayList;
+
 import java.util.Set;
 
 import com.organisation.pramati.webCrawler.services.serviceProcessor.CrawlerServiceProcessor;
@@ -15,7 +15,7 @@ public class CrawlerServiceClass {
 	{
 		crawlerServiceProcessorObj = new CrawlerServiceProcessor();
 		
-		ArrayList<String> hyperLinksOfMonths = crawlerServiceProcessorObj.getHyperlinksOfGivenYearService(mailYear);
+		Set<String> hyperLinksOfMonths = crawlerServiceProcessorObj.getHyperlinksOfGivenYearService(mailYear);
 		
 		if(hyperLinksOfMonths!=null && hyperLinksOfMonths.size()>0)
 		{
