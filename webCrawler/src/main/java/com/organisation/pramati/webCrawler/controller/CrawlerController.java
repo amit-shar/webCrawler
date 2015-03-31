@@ -3,8 +3,8 @@ package com.organisation.pramati.webCrawler.controller;
 
 import com.organisation.pramati.webCrawler.services.CrawlerService;
 import com.organisation.pramati.webCrawler.services.CrawlerServiceClass;
-import com.organisation.pramati.webCrawler.services.ServicesImplementor.CrawlerServiceImplementor;
 import com.organisation.pramati.webCrawler.services.serviceProcessor.CrawlerServiceProcessor;
+import com.organisation.pramati.webCrawler.services.servicesImplementor.CrawlerServiceImplementor;
 
 public class CrawlerController {
 	

@@ -2,7 +2,7 @@ package com.organisation.pramati.webCrawler.services;
 
 import java.util.ArrayList;
 
-import com.organisation.pramati.webCrawler.Model.FileMetaData;
+import com.organisation.pramati.webCrawler.model.FileMetaData;
 
 public interface CrawlerService {
 	

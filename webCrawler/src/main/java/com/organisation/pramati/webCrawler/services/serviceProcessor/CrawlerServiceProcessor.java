@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.organisation.pramati.webCrawler.Model.FileMetaData;
+import com.organisation.pramati.webCrawler.model.FileMetaData;
 import com.organisation.pramati.webCrawler.resources.Constants;
 import com.organisation.pramati.webCrawler.services.CrawlerService;
 
@@ -44,9 +44,7 @@ public ArrayList<String> getHyperlinksOfGivenYearService(String mailYear){
         while ((line = br.readLine()) != null) {
         	
             if(line.contains("<a href="+"\""+mailYear))
-            {  //count++;
-            	//int start =line.indexOf("href=")+6; 
-        		//hyperLinksSet.add(Constants.URL_TO_CRAWL+"/"+line.substring(start,start+11 ));
+            {  
             	System.out.println(line);
             	 m = p.matcher(line);
             	 if (m.find()) 
@@ -56,9 +54,9 @@ public ArrayList<String> getHyperlinksOfGivenYearService(String mailYear){
             
         }
         
-        //System.out.println("no of months urls"+hyperLinksSet.size()+"   "+count );
+       
         if(hyperLinksSet!=null && hyperLinksSet.size()>0)
-        	addPaginationLink(hyperLinksSet);
+        	//addPaginationLink(hyperLinksSet);
         	return hyperLinksSet;
         
      } catch (MalformedURLException mue) {
@@ -79,12 +77,11 @@ public ArrayList<String> getHyperlinksOfGivenYearService(String mailYear){
 	
 	}
 
-private void addPaginationLink(ArrayList<String> hyperLinksSet) {
+/*private void addPaginationLink(ArrayList<String> hyperLinksSet) {
 	
 	
-//2mrw
 	
-}
+}*/
 
 public ArrayList<FileMetaData> getHyperLinksOfAllMonthsMails(ArrayList<String> hyperLinksOfMonths) {
 	
@@ -122,15 +119,14 @@ public ArrayList<FileMetaData> getHyperLinksOfAllMonthsMails(ArrayList<String> h
 		        	
 		            if(line.contains("subject"))
 		            {  
-		            	//int start =line.indexOf("href=")+6; 
-		        		//hyperLinksSet.add(Constants.URL_TO_CRAWL+"/"+line.substring(start,start+11 ));
+		            	
 		            	 m = p.matcher(line);
 		            	 if (m!=null && m.find()) 
 		            	 {   if(m.group(1)!=null)
 		            		 fileMetaDataObj.setHyperLinkOfMail(link+"raw/"+m.group(1)); 
 		            	     count++;
 		            	 }
-		            	//System.out.println("links "+fileMetaDataObj.getHyperLinkOfMail() );	 
+		            	 
 		            		 
 		             }
 		            

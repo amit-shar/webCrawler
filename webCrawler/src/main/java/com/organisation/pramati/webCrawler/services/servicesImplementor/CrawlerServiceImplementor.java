@@ -1,8 +1,8 @@
-package com.organisation.pramati.webCrawler.services.ServicesImplementor;
+package com.organisation.pramati.webCrawler.services.servicesImplementor;
 
 import java.util.ArrayList;
 
-import com.organisation.pramati.webCrawler.Model.FileMetaData;
+import com.organisation.pramati.webCrawler.model.FileMetaData;
 import com.organisation.pramati.webCrawler.services.CrawlerService;
 import com.organisation.pramati.webCrawler.services.serviceProcessor.CrawlerServiceProcessor;
 
