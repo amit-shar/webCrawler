@@ -51,8 +51,7 @@ public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfM
 public void downloadMailService(String mailYear) {
 	
 	CrawlerServiceProcessor crawlerServiceProcessorObj = new CrawlerServiceProcessor();
-
-	crawlerServiceProcessorObj.downloadMailService(mailYear);
+    crawlerServiceProcessorObj.downloadMailService(mailYear);
 }
 
 }

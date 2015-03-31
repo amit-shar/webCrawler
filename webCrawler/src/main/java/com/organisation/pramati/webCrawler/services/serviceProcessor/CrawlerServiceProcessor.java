@@ -1,28 +1,25 @@
 package com.organisation.pramati.webCrawler.services.serviceProcessor;
 
 import java.io.BufferedReader;
-
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import org.apache.log4j.Logger;
 import com.organisation.pramati.webCrawler.model.FileMetaData;
 import com.organisation.pramati.webCrawler.resources.Constants;
 import com.organisation.pramati.webCrawler.services.CrawlerService;
+import com.organisation.pramati.webCrawler.utility.FileOperationUtility;
 
 public class CrawlerServiceProcessor implements CrawlerService{
+	
+	static Logger logger = Logger.getLogger(CrawlerServiceProcessor.class);
 	
 	
 public Set<String> getHyperlinksOfGivenYearService(String mailYear){
@@ -35,13 +32,15 @@ public Set<String> getHyperlinksOfGivenYearService(String mailYear){
     Set<String> hyperLinksSet = new HashSet<String>();
     
     
-    Pattern p = Pattern.compile("href=\"(.*?)\"");
+    Pattern p = Pattern.compile(Constants.PATTERN_FOR_HREF);
     
     try {
+    	
         url = new URL(Constants.URL_TO_CRAWL);
         is = url.openStream();  // throws an IOException
-        br = new BufferedReader(new InputStreamReader(is));
-        //int count=0;
+        br= new BufferedReader(new InputStreamReader(is));
+    	
+       
         while ((line = br.readLine()) != null) {
         	
             if(line.contains("<a href="+"\""+mailYear))
@@ -59,7 +58,6 @@ public Set<String> getHyperlinksOfGivenYearService(String mailYear){
         if(hyperLinksSet!=null && hyperLinksSet.size()>0)
         {	hyperLinksSet=addPaginationLink(hyperLinksSet);
             System.out.println("After pagination logic"+hyperLinksSet.size());	
-            return hyperLinksSet;
         	
         }
         
@@ -71,17 +69,18 @@ public Set<String> getHyperlinksOfGivenYearService(String mailYear){
         try {
             if (is != null) is.close();
         } catch (IOException ioe) {
-            //exception
+        	System.out.println("Exception ocurred while closing the file in method: getHyperlinksOfGivenYearService");
+        	logger.error("Exception ocurred while closing the file in method: getHyperlinksOfGivenYearService");
         }
     }
     
    
     
-    	return null;
+    return hyperLinksSet;
 	
 	}
 
-private Set<String> addPaginationLink(Set<String> hyperLinksSet) throws IOException {
+private Set<String> addPaginationLink(Set<String> hyperLinksSet) throws MalformedURLException,IOException {
 	
 	URL url;
     InputStream is = null;
@@ -92,7 +91,7 @@ private Set<String> addPaginationLink(Set<String> hyperLinksSet) throws IOExcept
     String hyperLink;
     String href=null;
     
-    Pattern p = Pattern.compile("href=\"(.*?)\"");
+    Pattern p = Pattern.compile(Constants.PATTERN_FOR_HREF); //("href=\"(.*?)\"");
     Iterator<String> it = hyperLinksSet.iterator();
     
     	
@@ -105,7 +104,7 @@ private Set<String> addPaginationLink(Set<String> hyperLinksSet) throws IOExcept
         br = new BufferedReader(new InputStreamReader(is));
         while ((line = br.readLine()) != null) {
         	
-            if(line.contains("<th class=\"pages"))
+            if(line.contains(Constants.PAGINATION_CHECK))
             {  
             	//System.out.println(line);
             	 m = p.matcher(line);
@@ -123,16 +122,7 @@ private Set<String> addPaginationLink(Set<String> hyperLinksSet) throws IOExcept
         
     }
     
-    
-    
-    
     hyperLinksSet.addAll(hyperLinksPaginationSet);
-    
-   /* it=hyperLinksSet.iterator();
-    while(it.hasNext())
-    {
-    	System.out.println("urls in comp pageset"+it.next());
-    }*/
     
     System.out.println("after pagination url counts"+hyperLinksSet.size());
     return hyperLinksSet;
@@ -154,7 +144,7 @@ public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfM
 	    String line;
 	    String link;
 	  
-	    Pattern p = Pattern.compile("href=\"(.*?)\"");
+	    Pattern p = Pattern.compile(Constants.PATTERN_FOR_HREF);
 	    Set<FileMetaData> hyperLinksSet = new HashSet<FileMetaData>();
 		Iterator<String> it = hyperLinksOfMonths.iterator();
 		FileMetaData fileMetaDataObj=null;
@@ -167,9 +157,7 @@ public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfM
 		        url = new URL(link);
 		        is = url.openStream();  // throws an IOException
 		        br = new BufferedReader(new InputStreamReader(is));
-		       /* Writer wr=new StringWriter();
-		        wr.write(br.read());
-		        wr.toString();*/
+		   
 		        while ((line = br.readLine()) != null) {
 		        	
 		        	 if(count==0)
@@ -181,14 +169,14 @@ public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfM
 		            	 m = p.matcher(line);
 		            	 if (m!=null && m.find()) 
 		            	 {   if(m.group(1)!=null)
-		            		 fileMetaDataObj.setHyperLinkOfMail(link+"raw/"+m.group(1)); 
+		            		 fileMetaDataObj.setHyperLinkOfMail(link+Constants.VIEW_RAW_MESSAGE+m.group(1)); 
 		            	     count++;
 		            	 }
 		            	 
 		            		 
 		             }
 		            
-		            if(line.contains("<td class=\"author"))
+		            if(line.contains(Constants.AUTHOR_NAME_SEARCH))
 		            {
 		            	if(getAuthor(line)!=null)
 		            	{ fileMetaDataObj.setAuthorName(getAuthor(line));
@@ -197,13 +185,13 @@ public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfM
 		            	}
 		            } 	 
 		            	
-		           if(line.contains("<td class=\"date"))
+		           if(line.contains(Constants.MAIL_DATE_TAG_SEARCH))
 		        	   if(getDate(line)!=null)
 		        	   { fileMetaDataObj.setDateOfMail(getDate(line));
 		                 count++;
 		        	   }
 		           
-		           if(line.contains("<td class=\"subject"))
+		           if(line.contains(Constants.MAIL_SUBJECT_SEARCH))
 		        	   if(getSubject(line)!=null) 
 		        	   {     fileMetaDataObj.setSubjectOfMail(getSubject(line));
 		                     count++;
@@ -228,13 +216,11 @@ public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfM
 		        try {
 		            if (is != null) is.close();
 		        } catch (IOException ioe) {
-		            //exception
+		           System.out.println("Exception ocurred while closing the file in method: getHyperLinksOfAllMonthsMails");
+		           logger.error("Exception ocurred while closing the file in method: getHyperlinksOfGivenYearService");
 		        }
 		    }
 		    
-		   /**/
-	
-
 		}
 		 if(hyperLinksSet!=null && hyperLinksSet.size()>0)	    	
 		    return hyperLinksSet;
@@ -246,13 +232,12 @@ public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfM
 private String getSubject(String line) {
 	String subject=null;
 	
-	if(line.contains("<td class=\"subject"))
-	{	//System.out.println(line.substring(line.indexOf(">")+1,line.lastIndexOf("<")));
+	if(line.contains(Constants.MAIL_SUBJECT_SEARCH))
+	{	
 		if(line.indexOf("%3e\">")!=-1 && line.lastIndexOf("<")!=-1)
 	      subject=line.substring(line.indexOf("%3e\">")+5,line.lastIndexOf("<")).replaceAll("</a>","");
 	 
-//		if(subject!=null)
-//		  return subject;
+
 	}
 
 
@@ -263,13 +248,11 @@ return subject;
 private String getDate(String line) {
 	String date=null;
 	
-	if(line.contains("<td class=\"date"))
-	{	//System.out.println(line.substring(line.indexOf(">")+1,line.lastIndexOf("<")));
+	if(line.contains(Constants.MAIL_DATE_TAG_SEARCH))
+	{	
 	
 	if(line.indexOf(">")!=-1 && line.lastIndexOf("<")!=-1)
     	date= line.substring(line.indexOf(">")+1,line.lastIndexOf("<"));
-//	if(date!=null)
-//		return date;
 		 
 	}
 
@@ -277,158 +260,36 @@ private String getDate(String line) {
 }
 
 private String getAuthor(String line) throws IOException {
-	String author=null;
 	
-		if(line.contains("<td class=\"author"))
+	  String author=null;
+	
+		if(line.contains(Constants.AUTHOR_NAME_SEARCH))
 		{
-			
-			
+				
 		if(line.indexOf(">")!=-1 && line.lastIndexOf("<")!=-1)	
-		   author= line.substring(line.indexOf(">")+1,line.lastIndexOf("<"));
-		
-			
+		   author= line.substring(line.indexOf(">")+1,line.lastIndexOf("<"));	
 		}
 		
 		return author;
-	
 }
+
+
 
 public void downloadMailService(String mailYear) {
 	
+FileOperationUtility fileOperationUtilityObj=new FileOperationUtility();
+	
 Set <String> hyperLinksOfMonths=getHyperlinksOfGivenYearService(mailYear);
-
 Set<FileMetaData> hyperLinkForAllEmails=getHyperLinksOfAllMonthsMails(hyperLinksOfMonths);
 
 System.out.println("size of hyperlinks" +hyperLinkForAllEmails.size());
 
 if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0)
-	 saveEmails(hyperLinkForAllEmails,mailYear);
-
+	fileOperationUtilityObj.saveEmails(hyperLinkForAllEmails,mailYear);
 	
 }
-
-private void saveEmails(Set<FileMetaData> hyperLinkForAllEmails,String mailYear) {
-	
-	createDirectory(Constants.DIR_PATH);
-	File directory=createDirectory(Constants.DIR_PATH+"/"+mailYear);
-	
-	String filePath;
-
-	if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0){
-		
-	for(FileMetaData file : hyperLinkForAllEmails)
-		
-	{
-		filePath=getFilePath(file);
-		File messageRawFile= createFile(directory,filePath);	
-		System.out.println("sending email hyperlink" +file.getHyperLinkOfMail());
-		saveEmailToFile(messageRawFile,file.getHyperLinkOfMail());
-		
-		
-	}
-	
-	
-	}
-		
-}
-
-private File createDirectory(String dirPath) {
-	
-	
-	//String dirPath="Downloads";
-	File directory= new File(dirPath);
-	boolean success;
-	
-	if (directory.exists()) {
-        System.out.println("Directory already exists ...");
-
-    } else {
-        System.out.println("Directory not exists, creating now");
-
-        success = directory.mkdir();
-        if (success) {
-            System.out.printf("Successfully created new directory : %s%n", dirPath);
-        } else {
-            System.out.printf("Failed to create new directory: %s%n", dirPath);
-        }
-    }
-	return directory;
-}
-
-private void saveEmailToFile(File messageRawFile, String hyperLinkOfMail) {
-
-        URL url;
-        try {
-        	
-        	System.out.println("saving mail" +hyperLinkOfMail);
-            url = new URL(hyperLinkOfMail);
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-            Writer out = new StringWriter();
-            for(int i=in.read();i!=-1;i=in.read()){
-            	out.write(i);
-            }
-            //char[] cbuf=new char[255];
-//            while ((in.read(cbuf)) != -1) {
-//                out.write(cbuf);
-//            }
-            FileWriter fw=new FileWriter(messageRawFile);
-            fw.write(out.toString());
-            fw.flush();
-            fw.close();
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-	
-}
-
-private File createFile(File directory,String filePath) {
-	
-	boolean success=false;
-	
-	File messageRawFile= new File(directory, filePath);
-	
-	if (messageRawFile.exists()) {
-        System.out.println("File already exists");
-
-    } else {
-        System.out.println("No such file exists, creating now");
-        try {
-			success = messageRawFile.createNewFile();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
-        if (success) {
-            System.out.printf("Successfully created new file: %s%n", messageRawFile);
-            
-        } else {
-            System.out.printf("Failed to create new file: %s%n",messageRawFile);
-            
-        }
-	
-    }
-	return messageRawFile;
-}
-
-private String getFilePath(FileMetaData fileObj) {
-	
-	String filePath="";
-	
-	if(fileObj!=null)
-	{  
-		if(fileObj.getDateOfMail()!=null)
-		{
-			String date[]=fileObj.getDateOfMail().split(" ");
-		    filePath=date[2]+fileObj.getAuthorName().replaceAll("/","")+fileObj.getSubjectOfMail().replaceAll("/","")+fileObj.getDateOfMail()+".txt";
-	 }
-	
-	}
-	return filePath;
 
 
 }
 
-}
+
