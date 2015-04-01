@@ -4,10 +4,14 @@ import java.util.Set;
 
 import com.organisation.pramati.webCrawler.model.FileMetaData;
 
+/**
+ * @author amits
+ *
+ */
 public interface CrawlerService {
-	
+
 	Set<String> getHyperlinksOfGivenYearService(String mailYear);
 	Set<FileMetaData> getHyperLinksOfAllMonthsMails(String hyperLinksOfMonths);
-    void downloadMailService(Set<FileMetaData> hyperLinkForAllEmails,String mailYear);	
+	void downloadMailService(Set<FileMetaData> hyperLinkForAllEmails,String mailYear);	
 
 }
