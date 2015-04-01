@@ -38,7 +38,7 @@ return hyperLinksOfMonths;
 
 	}
 
-public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfMonths)
+public Set<FileMetaData> getHyperLinksOfAllMonthsMails(String hyperLinksOfMonths)
 {
 	CrawlerServiceProcessor crawlerServiceProcessorObj = new CrawlerServiceProcessor();
 	
@@ -48,10 +48,10 @@ public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfM
 
 }
 
-public void downloadMailService(String mailYear) {
+public void downloadMailService(Set<FileMetaData> hyperLinksOfAllMails,String mailYear) {
 	
 	CrawlerServiceProcessor crawlerServiceProcessorObj = new CrawlerServiceProcessor();
-    crawlerServiceProcessorObj.downloadMailService(mailYear);
+    crawlerServiceProcessorObj.downloadMailService(hyperLinksOfAllMails,mailYear);
 }
 
 }

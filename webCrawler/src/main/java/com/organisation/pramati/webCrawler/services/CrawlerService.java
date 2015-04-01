@@ -7,7 +7,7 @@ import com.organisation.pramati.webCrawler.model.FileMetaData;
 public interface CrawlerService {
 	
 	Set<String> getHyperlinksOfGivenYearService(String mailYear);
-	Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfMonths);
-    void downloadMailService(String mailYear);	
+	Set<FileMetaData> getHyperLinksOfAllMonthsMails(String hyperLinksOfMonths);
+    void downloadMailService(Set<FileMetaData> hyperLinkForAllEmails,String mailYear);	
 
 }

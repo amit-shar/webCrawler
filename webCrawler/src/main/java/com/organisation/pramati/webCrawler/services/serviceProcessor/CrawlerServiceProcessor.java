@@ -132,7 +132,7 @@ private Set<String> addPaginationLink(Set<String> hyperLinksSet) throws Malforme
 	
 
 
-public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfMonths) {
+/*public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfMonths) {
 	
 	if(hyperLinksOfMonths!=null && hyperLinksOfMonths.size()>0)
 	{
@@ -227,6 +227,101 @@ public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfM
 	}
 	
 	return null;
+}*/
+
+public Set<FileMetaData> getHyperLinksOfAllMonthsMails(String hyperLinksOfMonths) {
+	
+	if(hyperLinksOfMonths!=null )
+	{
+		
+		URL url;
+	    InputStream is = null;
+	    Matcher m;
+	    BufferedReader br;
+	    String line;
+	    String link=hyperLinksOfMonths;
+	  
+	    Pattern p = Pattern.compile(Constants.PATTERN_FOR_HREF);
+	    Set<FileMetaData> hyperLinksSet = new HashSet<FileMetaData>();
+		
+		FileMetaData fileMetaDataObj=null;
+		int count =0;
+		
+		
+		    try {
+		        url = new URL(link);
+		        is = url.openStream();  // throws an IOException
+		        br = new BufferedReader(new InputStreamReader(is));
+		   
+		        while ((line = br.readLine()) != null) {
+		        	
+		        	 if(count==0)
+		        		 fileMetaDataObj= new FileMetaData();
+		        	
+		            if(line.contains("subject"))
+		            {  
+		            	
+		            	 m = p.matcher(line);
+		            	 if (m!=null && m.find()) 
+		            	 {   if(m.group(1)!=null)
+		            		 fileMetaDataObj.setHyperLinkOfMail(link+Constants.VIEW_RAW_MESSAGE+m.group(1)); 
+		            	     count++;
+		            	 }
+		            	 
+		            		 
+		             }
+		            
+		            if(line.contains(Constants.AUTHOR_NAME_SEARCH))
+		            {
+		            	if(getAuthor(line)!=null)
+		            	{ fileMetaDataObj.setAuthorName(getAuthor(line));
+		            	 count++;
+		            	 
+		            	}
+		            } 	 
+		            	
+		           if(line.contains(Constants.MAIL_DATE_TAG_SEARCH))
+		        	   if(getDate(line)!=null)
+		        	   { fileMetaDataObj.setDateOfMail(getDate(line));
+		                 count++;
+		        	   }
+		           
+		           if(line.contains(Constants.MAIL_SUBJECT_SEARCH))
+		        	   if(getSubject(line)!=null) 
+		        	   {     fileMetaDataObj.setSubjectOfMail(getSubject(line));
+		                     count++;
+		                 
+		        	   }
+		        if(count==4)
+		        {
+		        	hyperLinksSet.add(fileMetaDataObj);
+		        	count=0;
+		        }
+  
+		        }
+		        System.out.println("no of subject urls"+hyperLinksSet.size());
+		        
+		        }
+		        
+		     catch (MalformedURLException mue) {
+		         mue.printStackTrace();
+		    } catch (IOException ioe) {
+		         ioe.printStackTrace();
+		    } finally {
+		        try {
+		            if (is != null) is.close();
+		        } catch (IOException ioe) {
+		           System.out.println("Exception ocurred while closing the file in method: getHyperLinksOfAllMonthsMails");
+		           logger.error("Exception ocurred while closing the file in method: getHyperlinksOfGivenYearService");
+		        }
+		    }
+		    
+		
+		 if(hyperLinksSet!=null && hyperLinksSet.size()>0)	    	
+		    return hyperLinksSet;
+	}
+	
+	return null;
 }
 
 private String getSubject(String line) {
@@ -275,9 +370,9 @@ private String getAuthor(String line) throws IOException {
 
 
 
-public void downloadMailService(String mailYear) {
+/*public void downloadMailService(String mailYear) {
 	
-FileOperationUtility fileOperationUtilityObj=new FileOperationUtility();
+/*FileOperationUtility fileOperationUtilityObj=new FileOperationUtility();
 	
 Set <String> hyperLinksOfMonths=getHyperlinksOfGivenYearService(mailYear);
 Set<FileMetaData> hyperLinkForAllEmails=getHyperLinksOfAllMonthsMails(hyperLinksOfMonths);
@@ -287,8 +382,16 @@ System.out.println("size of hyperlinks" +hyperLinkForAllEmails.size());
 if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0)
 	fileOperationUtilityObj.saveEmails(hyperLinkForAllEmails,mailYear);
 	
-}
+}*/
 
+public void downloadMailService(Set<FileMetaData> hyperLinkForAllEmails,String mailYear) {
+	
+FileOperationUtility fileOperationUtilityObj=new FileOperationUtility();
+
+if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0)
+	fileOperationUtilityObj.saveEmails(hyperLinkForAllEmails,mailYear);
+	
+}
 
 }
 
