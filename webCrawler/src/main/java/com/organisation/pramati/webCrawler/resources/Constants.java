@@ -16,6 +16,8 @@ public final class Constants {
 	public static final String MAIL_SUBJECT_SEARCH="<td class=\"subject";
 	public static final String MAIL_DATE_TAG_SEARCH="<td class=\"date";
 	public static final String VIEW_RAW_MESSAGE="raw/";
+	public static final String PAGINATION_DATE_CHECK="date";
+	public static final String SUBJECT_LINKS="subject";
 
 
 	// PRIVATE //

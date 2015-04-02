@@ -1,13 +1,15 @@
 package com.organisation.pramati.webCrawler.controller;
 
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-
 
 import com.organisation.pramati.webCrawler.services.CrawlerService;
 import com.organisation.pramati.webCrawler.services.servicesImplementor.CrawlerServiceImplementor;
@@ -24,20 +26,21 @@ public class CrawlerController {
 	static Logger logger = Logger.getLogger(CrawlerController.class);
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NumberFormatException, MalformedURLException, IOException {
 
-		//logger.debug("Log4j appender configuration is successful !!");
+		BasicConfigurator.configure();
+
+		logger.debug("Log4j appender configuration is successful !!");
 
 		String mailYear= args[0];
+		CrawlerController crawlerControllerObj= new CrawlerController();
+		System.out.println("Year entered"+mailYear);
 
-		System.out.println("year entered"+mailYear);
-
-		Set<String> hyperLinks=mainHelper(mailYear);
+		Set<String> hyperLinks=crawlerControllerObj.mainHelper(mailYear);
 
 		if(hyperLinks!=null && hyperLinks.size()>0)
 		{	
-
-			createExecutorThreadPool(hyperLinks,mailYear);
+			crawlerControllerObj.createExecutorThreadPool(hyperLinks,mailYear);
 		}	     
 
 		else
@@ -48,18 +51,39 @@ public class CrawlerController {
 
 	}
 
-	private static Set<String> mainHelper(String mailYear)
+	public  Set<String> mainHelper(String mailYear) throws NumberFormatException, MalformedURLException, IOException
 	{
-
-		CrawlerService crawlerServiceObj= new CrawlerServiceImplementor();
-		Set<String> hyperLinks=crawlerServiceObj.getHyperlinksOfGivenYearService(mailYear);
-
-		return hyperLinks;
-
+		
+		
+       if(isYearNumeric(mailYear))
+       {	
+    	    CrawlerService crawlerServiceObj= new CrawlerServiceImplementor();
+            Set<String> hyperLinks=crawlerServiceObj.getHyperlinksOfGivenYearService(mailYear);
+            logger.info("Count of year hyperlinks are "+hyperLinks.size());
+		    return hyperLinks;
+       }
+      
+       else
+    	   
+       {
+    	   System.out.println("Year must contains numbers only");
+		   logger.error("In CrawlerController :mainHelper(): Year must contains numbers only"); 
+		   throw new NumberFormatException();
+    	   
+       }
+	
 
 	}
+	
+	public boolean isYearNumeric(String mailYear)
+	{
+		if(mailYear!=null && mailYear.length()==4 && !mailYear.equals("0000") && mailYear.matches("[0-9]+") )
+			return true;
+		else
+			return false;
+	}
 
-	private static void createExecutorThreadPool(Set<String> hyperLinks,String mailYear)
+	public  void createExecutorThreadPool(Set<String> hyperLinks,String mailYear)
 	{
 		ExecutorService executor = Executors.newFixedThreadPool(NTHREDS);
 
@@ -73,7 +97,8 @@ public class CrawlerController {
 
 			{ 
 				Runnable worker = new WebCrawlerWorker(urlCrawled,mailYear);
-				System.out.println(worker.toString()+" thread name");
+				System.out.println("Thread name"+worker.toString());
+				logger.info("In CrawlerController :createExecutorThreadPool():Thread name "+worker.toString());
 				executor.execute(worker);
 			}
 

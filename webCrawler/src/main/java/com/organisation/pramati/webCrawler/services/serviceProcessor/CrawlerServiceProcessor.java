@@ -26,7 +26,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 	static Logger logger = Logger.getLogger(CrawlerServiceProcessor.class);
 
 
-	public Set<String> getHyperlinksOfGivenYearService(String mailYear){
+	public Set<String> getHyperlinksOfGivenYearService(String mailYear) throws MalformedURLException, IOException{
 
 		URL url;
 		InputStream is = null;
@@ -49,9 +49,8 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 				if(line.contains("<a href="+"\""+mailYear))
 				{  
-					//System.out.println(line);
 					m = p.matcher(line);
-					if (m.find()) 
+					if (m.find() && m.group(1)!=null) 
 						hyperLinksSet.add(Constants.URL_TO_CRAWL+m.group(1).substring(0,12));
 				}
 
@@ -60,15 +59,12 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 
 			if(hyperLinksSet!=null && hyperLinksSet.size()>0)
-			{	hyperLinksSet=addPaginationLink(hyperLinksSet);
-			System.out.println("After pagination logic"+hyperLinksSet.size());	
+			{	
+				hyperLinksSet=addPaginationLink(hyperLinksSet);
+				System.out.println("After pagination logic"+hyperLinksSet.size());	
 
 			}
 
-		} catch (MalformedURLException mue) {
-			mue.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
 		} finally {
 			try {
 				if (is != null) is.close();
@@ -77,7 +73,6 @@ public class CrawlerServiceProcessor implements CrawlerService{
 				logger.error("Exception ocurred while closing the file in method: getHyperlinksOfGivenYearService");
 			}
 		}
-
 
 
 		return hyperLinksSet;
@@ -114,9 +109,10 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					m = p.matcher(line);
 					while (m.find()) {
 						href = m.group(1);
-						if(href.contains("date"))
+						if(href.contains(Constants.PAGINATION_DATE_CHECK))
 						{	//System.out.println("in pagination logic"+href);
-							hyperLinksPaginationSet.add(Constants.URL_PREFIX+href);}
+							hyperLinksPaginationSet.add(Constants.URL_PREFIX+href);
+						}
 					}
 
 
@@ -128,7 +124,8 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 		hyperLinksSet.addAll(hyperLinksPaginationSet);
 
-		System.out.println("after pagination url counts"+hyperLinksSet.size());
+		System.out.println("After pagination url counts"+hyperLinksSet.size());
+		logger.info("After pagination url counts"+hyperLinksSet.size());
 		return hyperLinksSet;
 
 
@@ -136,102 +133,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 
 
-	/*public Set<FileMetaData> getHyperLinksOfAllMonthsMails(Set<String> hyperLinksOfMonths) {
 
-	if(hyperLinksOfMonths!=null && hyperLinksOfMonths.size()>0)
-	{
-
-		URL url;
-	    InputStream is = null;
-	    Matcher m;
-	    BufferedReader br;
-	    String line;
-	    String link;
-
-	    Pattern p = Pattern.compile(Constants.PATTERN_FOR_HREF);
-	    Set<FileMetaData> hyperLinksSet = new HashSet<FileMetaData>();
-		Iterator<String> it = hyperLinksOfMonths.iterator();
-		FileMetaData fileMetaDataObj=null;
-		int count =0;
-
-		while (it.hasNext()) {
-		    link=it.next();
-		   // System.out.println(link);
-		    try {
-		        url = new URL(link);
-		        is = url.openStream();  // throws an IOException
-		        br = new BufferedReader(new InputStreamReader(is));
-
-		        while ((line = br.readLine()) != null) {
-
-		        	 if(count==0)
-		        		 fileMetaDataObj= new FileMetaData();
-
-		            if(line.contains("subject"))
-		            {  
-
-		            	 m = p.matcher(line);
-		            	 if (m!=null && m.find()) 
-		            	 {   if(m.group(1)!=null)
-		            		 fileMetaDataObj.setHyperLinkOfMail(link+Constants.VIEW_RAW_MESSAGE+m.group(1)); 
-		            	     count++;
-		            	 }
-
-
-		             }
-
-		            if(line.contains(Constants.AUTHOR_NAME_SEARCH))
-		            {
-		            	if(getAuthor(line)!=null)
-		            	{ fileMetaDataObj.setAuthorName(getAuthor(line));
-		            	 count++;
-
-		            	}
-		            } 	 
-
-		           if(line.contains(Constants.MAIL_DATE_TAG_SEARCH))
-		        	   if(getDate(line)!=null)
-		        	   { fileMetaDataObj.setDateOfMail(getDate(line));
-		                 count++;
-		        	   }
-
-		           if(line.contains(Constants.MAIL_SUBJECT_SEARCH))
-		        	   if(getSubject(line)!=null) 
-		        	   {     fileMetaDataObj.setSubjectOfMail(getSubject(line));
-		                     count++;
-
-		        	   }
-		        if(count==4)
-		        {
-		        	hyperLinksSet.add(fileMetaDataObj);
-		        	count=0;
-		        }
-
-		        }
-		        System.out.println("no of subject urls"+hyperLinksSet.size());
-
-		        }
-
-		     catch (MalformedURLException mue) {
-		         mue.printStackTrace();
-		    } catch (IOException ioe) {
-		         ioe.printStackTrace();
-		    } finally {
-		        try {
-		            if (is != null) is.close();
-		        } catch (IOException ioe) {
-		           System.out.println("Exception ocurred while closing the file in method: getHyperLinksOfAllMonthsMails");
-		           logger.error("Exception ocurred while closing the file in method: getHyperlinksOfGivenYearService");
-		        }
-		    }
-
-		}
-		 if(hyperLinksSet!=null && hyperLinksSet.size()>0)	    	
-		    return hyperLinksSet;
-	}
-
-	return null;
-}*/
 
 	public Set<FileMetaData> getHyperLinksOfAllMonthsMails(String hyperLinksOfMonths) {
 
@@ -262,14 +164,15 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					if(count==0)
 						fileMetaDataObj= new FileMetaData();
 
-					if(line.contains("subject"))
+					if(line.contains(Constants.SUBJECT_LINKS))
 					{  
 
 						m = p.matcher(line);
 						if (m!=null && m.find()) 
-						{   if(m.group(1)!=null)
-							fileMetaDataObj.setHyperLinkOfMail(link+Constants.VIEW_RAW_MESSAGE+m.group(1)); 
-						count++;
+						{  
+							if(m.group(1)!=null)
+								fileMetaDataObj.setHyperLinkOfMail(link+Constants.VIEW_RAW_MESSAGE+m.group(1)); 
+							count++;
 						}
 
 
@@ -278,24 +181,35 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					if(line.contains(Constants.AUTHOR_NAME_SEARCH))
 					{
 						if(getAuthor(line)!=null)
-						{ fileMetaDataObj.setAuthorName(getAuthor(line));
+							fileMetaDataObj.setAuthorName(getAuthor(line));
+
+						else
+							fileMetaDataObj.setAuthorName("NoAuthorAvailable");
+
 						count++;
 
-						}
 					} 	 
 
 					if(line.contains(Constants.MAIL_DATE_TAG_SEARCH))
+					{
 						if(getDate(line)!=null)
-						{ fileMetaDataObj.setDateOfMail(getDate(line));
-						count++;
-						}
+							fileMetaDataObj.setDateOfMail(getDate(line));
 
+						else 
+							fileMetaDataObj.setDateOfMail("NoDateAvailable");
+
+						count++;
+
+					}
 					if(line.contains(Constants.MAIL_SUBJECT_SEARCH))
+					{
 						if(getSubject(line)!=null) 
-						{     fileMetaDataObj.setSubjectOfMail(getSubject(line));
+							fileMetaDataObj.setSubjectOfMail(getSubject(line));
+						else
+							fileMetaDataObj.setSubjectOfMail("NoSubjectAvailable");	
 						count++;
 
-						}
+					}
 					if(count==4)
 					{
 						hyperLinksSet.add(fileMetaDataObj);
@@ -303,7 +217,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					}
 
 				}
-				System.out.println("no of subject urls"+hyperLinksSet.size());
+				System.out.println("Number of subject urls"+hyperLinksSet.size());
 
 			}
 
@@ -331,7 +245,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 	private String getSubject(String line) {
 		String subject=null;
 
-		if(line.contains(Constants.MAIL_SUBJECT_SEARCH))
+		if(line!=null && line.contains(Constants.MAIL_SUBJECT_SEARCH))
 		{	
 			if(line.indexOf("%3e\">")!=-1 && line.lastIndexOf("<")!=-1)
 				subject=line.substring(line.indexOf("%3e\">")+5,line.lastIndexOf("<")).replaceAll("</a>","");
@@ -347,7 +261,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 	private String getDate(String line) {
 		String date=null;
 
-		if(line.contains(Constants.MAIL_DATE_TAG_SEARCH))
+		if(line!=null && line.contains(Constants.MAIL_DATE_TAG_SEARCH))
 		{	
 
 			if(line.indexOf(">")!=-1 && line.lastIndexOf("<")!=-1)
@@ -362,7 +276,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 		String author=null;
 
-		if(line.contains(Constants.AUTHOR_NAME_SEARCH))
+		if(line!=null && line.contains(Constants.AUTHOR_NAME_SEARCH))
 		{
 
 			if(line.indexOf(">")!=-1 && line.lastIndexOf("<")!=-1)	
@@ -373,20 +287,6 @@ public class CrawlerServiceProcessor implements CrawlerService{
 	}
 
 
-
-	/*public void downloadMailService(String mailYear) {
-
-/*FileOperationUtility fileOperationUtilityObj=new FileOperationUtility();
-
-Set <String> hyperLinksOfMonths=getHyperlinksOfGivenYearService(mailYear);
-Set<FileMetaData> hyperLinkForAllEmails=getHyperLinksOfAllMonthsMails(hyperLinksOfMonths);
-
-System.out.println("size of hyperlinks" +hyperLinkForAllEmails.size());
-
-if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0)
-	fileOperationUtilityObj.saveEmails(hyperLinkForAllEmails,mailYear);
-
-}*/
 
 	public void downloadMailService(Set<FileMetaData> hyperLinkForAllEmails,String mailYear) {
 

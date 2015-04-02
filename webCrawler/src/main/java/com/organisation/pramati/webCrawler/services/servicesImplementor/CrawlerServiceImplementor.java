@@ -1,11 +1,16 @@
 package com.organisation.pramati.webCrawler.services.servicesImplementor;
 
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Set;
+
+import org.apache.log4j.Logger;
 
 import com.organisation.pramati.webCrawler.model.FileMetaData;
 import com.organisation.pramati.webCrawler.services.CrawlerService;
 import com.organisation.pramati.webCrawler.services.serviceProcessor.CrawlerServiceProcessor;
+
 
 /**
  * @author amits
@@ -13,10 +18,12 @@ import com.organisation.pramati.webCrawler.services.serviceProcessor.CrawlerServ
  */
 public class CrawlerServiceImplementor implements CrawlerService{
 
-	public Set<String> getHyperlinksOfGivenYearService(String mailYear)
+	private CrawlerServiceProcessor crawlerServiceProcessorObj=new CrawlerServiceProcessor();
+	static Logger logger = Logger.getLogger(CrawlerServiceImplementor.class);
+
+	public Set<String> getHyperlinksOfGivenYearService(String mailYear) throws MalformedURLException, IOException
 
 	{
-		CrawlerServiceProcessor crawlerServiceProcessorObj = new CrawlerServiceProcessor();
 
 		Set<String> hyperLinksOfMonths = crawlerServiceProcessorObj.getHyperlinksOfGivenYearService(mailYear);	
 		return hyperLinksOfMonths;
@@ -25,18 +32,35 @@ public class CrawlerServiceImplementor implements CrawlerService{
 
 	public Set<FileMetaData> getHyperLinksOfAllMonthsMails(String hyperLinksOfMonths)
 	{
-		CrawlerServiceProcessor crawlerServiceProcessorObj = new CrawlerServiceProcessor();
 
-		Set<FileMetaData> hyperLinksOfAllMails= crawlerServiceProcessorObj.getHyperLinksOfAllMonthsMails(hyperLinksOfMonths);
+		Set<FileMetaData> hyperLinksOfAllMails=null;
+		if(hyperLinksOfMonths!=null)
+		{
+			hyperLinksOfAllMails= crawlerServiceProcessorObj.getHyperLinksOfAllMonthsMails(hyperLinksOfMonths);
+			return hyperLinksOfAllMails;
+		}
+
+		else
+		{
+			System.out.println("No mails exist for this link");
+			logger.error("No mails exist for this link or given hyperlink is invalid/empty");
+		}
 
 		return hyperLinksOfAllMails;
-
 	}
 
 	public void downloadMailService(Set<FileMetaData> hyperLinksOfAllMails,String mailYear) {
 
-		CrawlerServiceProcessor crawlerServiceProcessorObj = new CrawlerServiceProcessor();
-		crawlerServiceProcessorObj.downloadMailService(hyperLinksOfAllMails,mailYear);
+		if(hyperLinksOfAllMails!=null && hyperLinksOfAllMails.size()>0)
+			crawlerServiceProcessorObj.downloadMailService(hyperLinksOfAllMails,mailYear);
+
+		else 
+		{
+			System.out.println("Nothing to download");
+			logger.error("No mails exist for download");
+
+		}
+
 	}
 
 }
