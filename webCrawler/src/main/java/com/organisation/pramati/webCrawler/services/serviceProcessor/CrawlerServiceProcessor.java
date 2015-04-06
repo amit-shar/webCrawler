@@ -163,7 +163,9 @@ public class CrawlerServiceProcessor implements CrawlerService{
 				while ((line = br.readLine()) != null) {
 
 					if(count==0)
+						{
 						fileMetaDataObj= new FileMetaData();
+						}
 
 					if(line.contains(Constants.SUBJECT_LINKS))
 					{  
@@ -172,7 +174,9 @@ public class CrawlerServiceProcessor implements CrawlerService{
 						if (m!=null && m.find()) 
 						{  
 							if(m.group(1)!=null)
+							{
 								fileMetaDataObj.setHyperLinkOfMail(link+Constants.VIEW_RAW_MESSAGE+m.group(1)); 
+							}
 							count++;
 						}
 
@@ -182,10 +186,14 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					if(line.contains(Constants.AUTHOR_NAME_SEARCH))
 					{
 						if(getAuthor(line)!=null)
+							{
 							fileMetaDataObj.setAuthorName(getAuthor(line));
+							}
 
 						else
+							{
 							fileMetaDataObj.setAuthorName("NoAuthorAvailable");
+							}
 
 						count++;
 
@@ -194,10 +202,14 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					if(line.contains(Constants.MAIL_DATE_TAG_SEARCH))
 					{
 						if(getDate(line)!=null)
+							{
 							fileMetaDataObj.setDateOfMail(getDate(line));
+							}
 
 						else 
+							{
 							fileMetaDataObj.setDateOfMail("NoDateAvailable");
+							}
 
 						count++;
 
@@ -205,9 +217,13 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					if(line.contains(Constants.MAIL_SUBJECT_SEARCH))
 					{
 						if(getSubject(line)!=null) 
+							{
 							fileMetaDataObj.setSubjectOfMail(getSubject(line));
+							}
 						else
+							{
 							fileMetaDataObj.setSubjectOfMail("NoSubjectAvailable");	
+							}
 						count++;
 
 					}
@@ -243,13 +259,15 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		return null;
 	}
 
-	public String getSubject(String line) {
+	protected String getSubject(String line) {
 		String subject=null;
 
 		if(line!=null && line.contains(Constants.MAIL_SUBJECT_SEARCH))
 		{	
 			if(line.indexOf("%3e\">")!=-1 && line.lastIndexOf("<")!=-1)
+				{
 				subject=line.substring(line.indexOf("%3e\">")+5,line.lastIndexOf("<")).replaceAll("</a>","");
+				}
 
 
 		}
@@ -259,21 +277,23 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 	}
 
-	public String getDate(String line) {
+	protected String getDate(String line) {
 		String date=null;
 
 		if(line!=null && line.contains(Constants.MAIL_DATE_TAG_SEARCH))
 		{	
 
 			if(line.indexOf(">")!=-1 && line.lastIndexOf("<")!=-1)
+				{
 				date= line.substring(line.indexOf(">")+1,line.lastIndexOf("<"));
+				}
 
 		}
 
 		return date;
 	}
 
-	public String getAuthor(String line)  {
+	protected String getAuthor(String line)  {
 
 		String author=null;
 
@@ -281,7 +301,9 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		{
 
 			if(line.indexOf(">")!=-1 && line.lastIndexOf("<")!=-1)	
+				{
 				author= line.substring(line.indexOf(">")+1,line.lastIndexOf("<"));	
+				}
 		}
 
 		return author;
@@ -294,7 +316,9 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		FileOperationUtility fileOperationUtilityObj=new FileOperationUtility();
 
 		if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0)
+			{
 			fileOperationUtilityObj.saveEmails(hyperLinkForAllEmails,mailYear);
+			}
 
 	}
 

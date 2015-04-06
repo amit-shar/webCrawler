@@ -34,6 +34,7 @@ public class CrawlerController {
 
 		String mailYear= args[0];
 		CrawlerController crawlerControllerObj= new CrawlerController();
+		
 		System.out.println("Year entered"+mailYear);
 
 		Set<String> hyperLinks=crawlerControllerObj.mainHelper(mailYear);
@@ -51,7 +52,7 @@ public class CrawlerController {
 
 	}
 
-	public  Set<String> mainHelper(String mailYear) throws NumberFormatException, MalformedURLException, IOException
+	protected  Set<String> mainHelper(String mailYear) throws NumberFormatException, MalformedURLException, IOException
 	{
 		
 		
@@ -75,15 +76,19 @@ public class CrawlerController {
 
 	}
 	
-	public boolean isYearNumeric(String mailYear)
+	protected boolean isYearNumeric(String mailYear)
 	{
 		if(mailYear!=null && mailYear.length()==4 && !mailYear.equals("0000") && mailYear.matches("[0-9]+") )
+			{
 			return true;
+			}
 		else
+			{
 			return false;
+			}
 	}
 
-	public  void createExecutorThreadPool(Set<String> hyperLinks,String mailYear)
+	protected  void createExecutorThreadPool(Set<String> hyperLinks,String mailYear)
 	{
 		ExecutorService executor = Executors.newFixedThreadPool(NTHREDS);
 

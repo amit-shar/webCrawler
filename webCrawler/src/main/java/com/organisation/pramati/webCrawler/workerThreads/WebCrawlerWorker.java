@@ -37,7 +37,9 @@ public class WebCrawlerWorker implements Runnable{
 		logger.info("In the run methd, count of mails for the current thread is"+hyperLinkForAllEmails.size());
 
 		if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0)
+		{
 			crawlerServiceObj.downloadMailService(hyperLinkForAllEmails,mailYear);
+		}
 
 
 	}
