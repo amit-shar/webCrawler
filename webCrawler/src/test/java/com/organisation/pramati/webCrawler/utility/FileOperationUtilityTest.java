@@ -11,7 +11,7 @@ import org.junit.Test;
 public class FileOperationUtilityTest {
 
 	private FileOperationUtility helper;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		helper= new FileOperationUtility();
@@ -24,9 +24,9 @@ public class FileOperationUtilityTest {
 
 	@Test
 	public void createDirectoryTest() {
-		
+
 		File obj =helper.createDirectory(null);
-	        assertEquals(obj, null);
+		assertEquals(obj, null);
 	}
 
 }

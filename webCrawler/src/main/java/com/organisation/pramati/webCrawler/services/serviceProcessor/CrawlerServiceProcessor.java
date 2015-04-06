@@ -25,7 +25,12 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 	static Logger logger = Logger.getLogger(CrawlerServiceProcessor.class);
 
-
+	/*
+	 * This method will crawl the given hyperlink and find all the hyperlink
+	 * for the given year.
+	 * (non-Javadoc)
+	 * @see com.organisation.pramati.webCrawler.services.CrawlerService#getHyperlinksOfGivenYearService(java.lang.String)
+	 */
 	public Set<String> getHyperlinksOfGivenYearService(String mailYear) throws MalformedURLException, IOException{
 
 		URL url;
@@ -78,7 +83,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		return hyperLinksSet;
 
 	}
-	
+
 
 	private Set<String> addPaginationLink(Set<String> hyperLinksSet) throws MalformedURLException,IOException {
 
@@ -134,7 +139,12 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 
 
-
+	/*
+	 * This method will find the hyperlink for each month and add all the links to 
+	 * the hyperLinks set of FileMetaData.
+	 * (non-Javadoc)
+	 * @see com.organisation.pramati.webCrawler.services.CrawlerService#getHyperLinksOfAllMonthsMails(java.lang.String)
+	 */
 
 	public Set<FileMetaData> getHyperLinksOfAllMonthsMails(String hyperLinksOfMonths) {
 
@@ -163,9 +173,9 @@ public class CrawlerServiceProcessor implements CrawlerService{
 				while ((line = br.readLine()) != null) {
 
 					if(count==0)
-						{
+					{
 						fileMetaDataObj= new FileMetaData();
-						}
+					}
 
 					if(line.contains(Constants.SUBJECT_LINKS))
 					{  
@@ -186,14 +196,14 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					if(line.contains(Constants.AUTHOR_NAME_SEARCH))
 					{
 						if(getAuthor(line)!=null)
-							{
+						{
 							fileMetaDataObj.setAuthorName(getAuthor(line));
-							}
+						}
 
 						else
-							{
+						{
 							fileMetaDataObj.setAuthorName("NoAuthorAvailable");
-							}
+						}
 
 						count++;
 
@@ -202,14 +212,14 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					if(line.contains(Constants.MAIL_DATE_TAG_SEARCH))
 					{
 						if(getDate(line)!=null)
-							{
+						{
 							fileMetaDataObj.setDateOfMail(getDate(line));
-							}
+						}
 
 						else 
-							{
+						{
 							fileMetaDataObj.setDateOfMail("NoDateAvailable");
-							}
+						}
 
 						count++;
 
@@ -217,13 +227,13 @@ public class CrawlerServiceProcessor implements CrawlerService{
 					if(line.contains(Constants.MAIL_SUBJECT_SEARCH))
 					{
 						if(getSubject(line)!=null) 
-							{
+						{
 							fileMetaDataObj.setSubjectOfMail(getSubject(line));
-							}
+						}
 						else
-							{
+						{
 							fileMetaDataObj.setSubjectOfMail("NoSubjectAvailable");	
-							}
+						}
 						count++;
 
 					}
@@ -259,15 +269,19 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		return null;
 	}
 
+
+	/*
+	 * @returns the subject of the mail.
+	 */
 	protected String getSubject(String line) {
 		String subject=null;
 
 		if(line!=null && line.contains(Constants.MAIL_SUBJECT_SEARCH))
 		{	
 			if(line.indexOf("%3e\">")!=-1 && line.lastIndexOf("<")!=-1)
-				{
+			{
 				subject=line.substring(line.indexOf("%3e\">")+5,line.lastIndexOf("<")).replaceAll("</a>","");
-				}
+			}
 
 
 		}
@@ -277,6 +291,10 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 	}
 
+
+	/*
+	 * @returns date of the mail.
+	 */
 	protected String getDate(String line) {
 		String date=null;
 
@@ -284,15 +302,19 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		{	
 
 			if(line.indexOf(">")!=-1 && line.lastIndexOf("<")!=-1)
-				{
+			{
 				date= line.substring(line.indexOf(">")+1,line.lastIndexOf("<"));
-				}
+			}
 
 		}
 
 		return date;
 	}
 
+
+	/*
+	 * @returns author name of the mail.
+	 */
 	protected String getAuthor(String line)  {
 
 		String author=null;
@@ -301,24 +323,28 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		{
 
 			if(line.indexOf(">")!=-1 && line.lastIndexOf("<")!=-1)	
-				{
+			{
 				author= line.substring(line.indexOf(">")+1,line.lastIndexOf("<"));	
-				}
+			}
 		}
 
 		return author;
 	}
 
 
-
+	/*
+	 * This method calls the fileoperationutility method and saves the mail to the text file.
+	 * (non-Javadoc)
+	 * @see com.organisation.pramati.webCrawler.services.CrawlerService#downloadMailService(java.util.Set, java.lang.String)
+	 */
 	public void downloadMailService(Set<FileMetaData> hyperLinkForAllEmails,String mailYear) {
 
 		FileOperationUtility fileOperationUtilityObj=new FileOperationUtility();
 
 		if(hyperLinkForAllEmails!=null && hyperLinkForAllEmails.size()>0)
-			{
+		{
 			fileOperationUtilityObj.saveEmails(hyperLinkForAllEmails,mailYear);
-			}
+		}
 
 	}
 

@@ -19,6 +19,7 @@ public class WebCrawlerWorker implements Runnable{
 
 	static Logger logger = Logger.getLogger(WebCrawlerWorker.class);
 
+
 	public WebCrawlerWorker(String hyperlinks,String mailYear)
 	{
 

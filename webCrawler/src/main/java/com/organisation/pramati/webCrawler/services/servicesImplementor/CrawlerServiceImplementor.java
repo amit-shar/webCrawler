@@ -52,7 +52,9 @@ public class CrawlerServiceImplementor implements CrawlerService{
 	public void downloadMailService(Set<FileMetaData> hyperLinksOfAllMails,String mailYear) {
 
 		if(hyperLinksOfAllMails!=null && hyperLinksOfAllMails.size()>0)
+		{
 			crawlerServiceProcessorObj.downloadMailService(hyperLinksOfAllMails,mailYear);
+		}
 
 		else 
 		{

@@ -20,6 +20,8 @@ public class FileOperationUtility {
 
 	static Logger logger = Logger.getLogger(FileOperationUtility.class);
 
+
+
 	public void saveEmails(Set<FileMetaData> hyperLinkForAllEmails,String mailYear) {
 
 		createDirectory(Constants.DIR_PATH);
@@ -45,12 +47,15 @@ public class FileOperationUtility {
 
 			}
 		}
-		
+
 		else
 			logger.error("directory not created");
 
 	}
-
+	/*
+	 * This method creates the directory.
+	 * 
+	 */
 
 	public File createDirectory(String dirPath) {
 
@@ -112,6 +117,10 @@ public class FileOperationUtility {
 
 	}
 
+
+	/*
+	 * This method creates the file to store the email raw message.
+	 */
 	public File createFile(File directory,String filePath) {
 
 		boolean success=false;
@@ -141,6 +150,10 @@ public class FileOperationUtility {
 		return messageRawFile;
 	}
 
+
+	/*
+	 * This method creates the file name and path for the mail.
+	 */
 	public String getFilePath(FileMetaData fileObj) {
 
 		String filePath="";
