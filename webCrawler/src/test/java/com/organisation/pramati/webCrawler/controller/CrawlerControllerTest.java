@@ -23,10 +23,10 @@ helper= new CrawlerController();
 	public void isYearNumerictest() {
 		
 		assertTrue(helper.isYearNumeric("2015"));
-		assertTrue(helper.isYearNumeric("0000"));
-		assertTrue(helper.isYearNumeric("20A1"));
-		assertTrue(helper.isYearNumeric("Ab15"));
-		assertTrue(helper.isYearNumeric("Ab@#1"));
+		assertFalse(helper.isYearNumeric("0000"));
+		assertFalse(helper.isYearNumeric("20A1"));
+		assertFalse(helper.isYearNumeric("Ab15"));
+		assertFalse(helper.isYearNumeric("Ab@#1"));
 
 	}
 	
