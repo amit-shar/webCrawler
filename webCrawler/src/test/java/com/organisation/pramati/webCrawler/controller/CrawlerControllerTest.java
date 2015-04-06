@@ -2,6 +2,7 @@ package com.organisation.pramati.webCrawler.controller;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,12 +12,13 @@ public class CrawlerControllerTest {
 	private CrawlerController helper;
 
 @Before
-public void before()
+public void setUp()
 {
 		
 helper= new CrawlerController();
 		 
 }
+
 	@Test
 	public void isYearNumerictest() {
 		
@@ -28,7 +30,12 @@ helper= new CrawlerController();
 
 	}
 	
-
+	
+@After
+public void tear()
+{
+	helper=null;
+}
 	
 	
 

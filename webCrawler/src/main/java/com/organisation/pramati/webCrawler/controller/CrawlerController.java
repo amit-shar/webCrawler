@@ -22,7 +22,7 @@ import com.organisation.pramati.webCrawler.workerThreads.WebCrawlerWorker;
 public class CrawlerController {
 
 
-	private static final int NTHREDS = 10;
+	private static final int NTHREDS = 12;
 	static Logger logger = Logger.getLogger(CrawlerController.class);
 
 

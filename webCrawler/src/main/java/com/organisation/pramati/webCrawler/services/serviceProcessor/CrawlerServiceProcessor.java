@@ -78,6 +78,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		return hyperLinksSet;
 
 	}
+	
 
 	private Set<String> addPaginationLink(Set<String> hyperLinksSet) throws MalformedURLException,IOException {
 
@@ -242,7 +243,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		return null;
 	}
 
-	private String getSubject(String line) {
+	public String getSubject(String line) {
 		String subject=null;
 
 		if(line!=null && line.contains(Constants.MAIL_SUBJECT_SEARCH))
@@ -258,7 +259,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 	}
 
-	private String getDate(String line) {
+	public String getDate(String line) {
 		String date=null;
 
 		if(line!=null && line.contains(Constants.MAIL_DATE_TAG_SEARCH))
@@ -272,7 +273,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		return date;
 	}
 
-	private String getAuthor(String line) throws IOException {
+	public String getAuthor(String line)  {
 
 		String author=null;
 
