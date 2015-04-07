@@ -41,7 +41,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		Set<String> hyperLinksSet = new HashSet<String>();
 
 
-		Pattern p = Pattern.compile(Constants.PATTERN_FOR_HREF);
+		Pattern p = getHyperlinkPattern();//Pattern.compile(Constants.PATTERN_FOR_HREF);
 
 		try {
 
@@ -96,7 +96,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		String hyperLink;
 		String href=null;
 
-		Pattern p = Pattern.compile(Constants.PATTERN_FOR_HREF); //("href=\"(.*?)\"");
+		Pattern p = getHyperlinkPattern();  //Pattern.compile(Constants.PATTERN_FOR_HREF); //("href=\"(.*?)\"");
 		Iterator<String> it = hyperLinksSet.iterator();
 
 
@@ -158,7 +158,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 			String line;
 			String link=hyperLinksOfMonths;
 
-			Pattern p = Pattern.compile(Constants.PATTERN_FOR_HREF);
+			Pattern p = getHyperlinkPattern(); //Pattern.compile(Constants.PATTERN_FOR_HREF);
 			Set<FileMetaData> hyperLinksSet = new HashSet<FileMetaData>();
 
 			FileMetaData fileMetaDataObj=null;
@@ -245,6 +245,11 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 				}
 				System.out.println("Number of subject urls"+hyperLinksSet.size());
+				
+				if(hyperLinksSet!=null && hyperLinksSet.size()>0)	    	
+					{
+					return hyperLinksSet;
+					}
 
 			}
 
@@ -262,8 +267,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 			}
 
 
-			if(hyperLinksSet!=null && hyperLinksSet.size()>0)	    	
-				return hyperLinksSet;
+			
 		}
 
 		return null;
@@ -274,6 +278,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 	 * @returns the subject of the mail.
 	 */
 	protected String getSubject(String line) {
+		
 		String subject=null;
 
 		if(line!=null && line.contains(Constants.MAIL_SUBJECT_SEARCH))
@@ -296,6 +301,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 	 * @returns date of the mail.
 	 */
 	protected String getDate(String line) {
+		
 		String date=null;
 
 		if(line!=null && line.contains(Constants.MAIL_DATE_TAG_SEARCH))
@@ -331,6 +337,11 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		return author;
 	}
 
+	
+	protected Pattern getHyperlinkPattern()
+	{
+		return Pattern.compile(Constants.PATTERN_FOR_HREF);
+	}
 
 	/*
 	 * This method calls the fileoperationutility method and saves the mail to the text file.

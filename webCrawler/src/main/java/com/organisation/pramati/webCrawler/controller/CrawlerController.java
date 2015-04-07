@@ -58,7 +58,7 @@ public class CrawlerController {
 
 	/*
 	 * This method will call the implementor layer methods and returns 
-	 * set of hyperlinks for the entered year.
+	 * set of hyper-links for the entered year.
 	 * If entered year is not a valid year it will throw numberFormatException
 	 * 
 	 */
@@ -131,8 +131,8 @@ public class CrawlerController {
 			}
 
 		}	     
-		executor.shutdown(); // This will make the executor accept no new threads
-		// and finish all existing threads in the queue
+		executor.shutdown(); /* This will make the executor accept no new threads
+		 and finish all existing threads in the queue*/
 
 	}
 }
