@@ -1,4 +1,4 @@
-package com.pramati.webcrawler.controller;
+package com.pramati.webcrawler;
 
 
 import java.io.IOException;

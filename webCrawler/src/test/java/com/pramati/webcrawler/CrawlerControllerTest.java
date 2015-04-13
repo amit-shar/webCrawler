@@ -1,4 +1,4 @@
-package com.pramati.webcrawler.controller;
+package com.pramati.webcrawler;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.pramati.webcrawler.controller.CrawlerController;
+import com.pramati.webcrawler.CrawlerController;
 
 public class CrawlerControllerTest {
 

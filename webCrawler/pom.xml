@@ -37,7 +37,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.pramati.webcrawler.controller.CrawlerController</mainClass>
+							<mainClass>com.pramati.webcrawler.CrawlerController</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
