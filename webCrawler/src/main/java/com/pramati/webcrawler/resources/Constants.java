@@ -1,4 +1,4 @@
-package com.organisation.pramati.webCrawler.resources;
+package com.pramati.webcrawler.resources;
 
 /**
  * @author amits

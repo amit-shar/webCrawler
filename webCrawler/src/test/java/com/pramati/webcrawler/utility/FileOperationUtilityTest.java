@@ -1,4 +1,4 @@
-package com.organisation.pramati.webCrawler.utility;
+package com.pramati.webcrawler.utility;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,8 @@ import java.io.File;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.pramati.webcrawler.utility.FileOperationUtility;
 
 public class FileOperationUtilityTest {
 

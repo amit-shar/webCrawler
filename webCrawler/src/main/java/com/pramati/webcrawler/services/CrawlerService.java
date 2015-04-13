@@ -1,10 +1,10 @@
-package com.organisation.pramati.webCrawler.services;
+package com.pramati.webcrawler.services;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Set;
 
-import com.organisation.pramati.webCrawler.model.FileMetaData;
+import com.pramati.webcrawler.model.FileMetaData;
 
 /**
  * @author amits

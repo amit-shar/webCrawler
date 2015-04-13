@@ -1,4 +1,4 @@
-package com.organisation.pramati.webCrawler.controller;
+package com.pramati.webcrawler.controller;
 
 
 import java.io.IOException;
@@ -11,9 +11,8 @@ import java.util.concurrent.Executors;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-import com.organisation.pramati.webCrawler.services.CrawlerService;
-import com.organisation.pramati.webCrawler.services.servicesImplementor.CrawlerServiceImplementor;
-import com.organisation.pramati.webCrawler.workerThreads.WebCrawlerWorker;
+import com.pramati.webcrawler.services.CrawlerService;
+import com.pramati.webcrawler.services.implementor.CrawlerServiceImplementor;
 
 /**
  * @author amits

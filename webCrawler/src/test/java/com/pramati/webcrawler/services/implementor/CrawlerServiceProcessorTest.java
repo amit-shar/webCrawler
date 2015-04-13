@@ -1,10 +1,12 @@
-package com.organisation.pramati.webCrawler.services.serviceProcessor;
+package com.pramati.webcrawler.services.implementor;
 
 import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.pramati.webcrawler.services.implementor.CrawlerServiceProcessor;
 
 public class CrawlerServiceProcessorTest {
 

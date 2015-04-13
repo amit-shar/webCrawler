@@ -1,4 +1,4 @@
-package com.organisation.pramati.webCrawler.services.serviceProcessor;
+package com.pramati.webcrawler.services.implementor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,11 +11,13 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
-import com.organisation.pramati.webCrawler.model.FileMetaData;
-import com.organisation.pramati.webCrawler.resources.Constants;
-import com.organisation.pramati.webCrawler.services.CrawlerService;
-import com.organisation.pramati.webCrawler.utility.FileOperationUtility;
+
+import com.pramati.webcrawler.model.FileMetaData;
+import com.pramati.webcrawler.resources.Constants;
+import com.pramati.webcrawler.services.CrawlerService;
+import com.pramati.webcrawler.utility.FileOperationUtility;
 
 /**
  * @author amits
@@ -40,6 +42,7 @@ public class CrawlerServiceProcessor implements CrawlerService{
 		String line;
 		Set<String> hyperLinksSet = new HashSet<String>();
 
+		
 
 		Pattern p = getHyperlinkPattern();//Pattern.compile(Constants.PATTERN_FOR_HREF);
 
@@ -255,9 +258,12 @@ public class CrawlerServiceProcessor implements CrawlerService{
 
 			catch (MalformedURLException mue) {
 				mue.printStackTrace();
+				
 			} catch (IOException ioe) {
+				
 				ioe.printStackTrace();
 			} finally {
+				
 				try {
 					if (is != null) is.close();
 				} catch (IOException ioe) {

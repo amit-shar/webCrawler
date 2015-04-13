@@ -1,4 +1,4 @@
-package com.organisation.pramati.webCrawler.utility;
+package com.pramati.webcrawler.utility;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,8 +13,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.organisation.pramati.webCrawler.model.FileMetaData;
-import com.organisation.pramati.webCrawler.resources.Constants;
+import com.pramati.webcrawler.model.FileMetaData;
+import com.pramati.webcrawler.resources.Constants;
 
 public class FileOperationUtility {
 

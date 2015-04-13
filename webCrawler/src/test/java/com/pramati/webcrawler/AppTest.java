@@ -1,4 +1,4 @@
-package com.organisation.pramati.webCrawler;
+package com.pramati.webcrawler;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

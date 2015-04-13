@@ -1,12 +1,12 @@
-package com.organisation.pramati.webCrawler.workerThreads;
+package com.pramati.webcrawler.controller;
 
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.organisation.pramati.webCrawler.model.FileMetaData;
-import com.organisation.pramati.webCrawler.services.CrawlerService;
-import com.organisation.pramati.webCrawler.services.servicesImplementor.CrawlerServiceImplementor;
+import com.pramati.webcrawler.model.FileMetaData;
+import com.pramati.webcrawler.services.CrawlerService;
+import com.pramati.webcrawler.services.implementor.CrawlerServiceImplementor;
 
 /**
  * @author amits

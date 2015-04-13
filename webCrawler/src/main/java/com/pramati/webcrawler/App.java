@@ -1,4 +1,4 @@
-package com.organisation.pramati.webCrawler;
+package com.pramati.webcrawler;
 
 /**
  * Hello world!

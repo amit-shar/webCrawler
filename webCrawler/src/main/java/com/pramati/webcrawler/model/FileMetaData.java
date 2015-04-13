@@ -1,4 +1,4 @@
-package com.organisation.pramati.webCrawler.model;
+package com.pramati.webcrawler.model;
 
 public class FileMetaData {
 	
